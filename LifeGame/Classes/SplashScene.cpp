@@ -1,6 +1,7 @@
 #include "SplashScene.h" 
 #include "MainMenuScene.h"
 #include "CommonUtils.h"
+#include "ConstUITags.h"
 USING_NS_CC;
 
 using namespace  CocosDenshion;
@@ -32,13 +33,34 @@ bool SplashScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+
+	auto mlabel = LabelTTF::create("Do Not Touch Me", "epson1", 60);
+	auto mtextLabel = MenuItemLabel::create(
+		mlabel,
+		CC_CALLBACK_1(SplashScene::touchAudioButton, this));
+
+
+	mtextLabel->setColor(Color3B(0.0f,128.0f,255.0f));
+	mtextLabel->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	mtextLabel->setTag(UI_WIDGET_TAG::WELCOME_LABEL);
+
+	 auto menu = Menu::create( mtextLabel,NULL);
+	 menu->setPosition(Vec2::ZERO);
+	 menu->setTag(UI_WIDGET_TAG::WELCOME_MENU);
+	 this->addChild(menu, 1);
+
+
+	 FadeOut* mFade =  FadeOut::create(3.0f);
+	 mtextLabel->runAction(mFade);
+	 scheduleOnce(schedule_selector(SplashScene::goGameScene) , 3.0f);
+
 	
-	auto sprite = Sprite::create("John_H_Conway_2001.png");
+	/*auto sprite = Sprite::create("John_H_Conway_2001.png");
 	sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 	this->addChild(sprite, 0);
 	FadeOut* mFade =  FadeOut::create(3.0f);
 	sprite->runAction(mFade);
-	scheduleOnce(schedule_selector(SplashScene::goGameScene) , 3.0f);
+	scheduleOnce(schedule_selector(SplashScene::goGameScene) , 3.0f);*/
 
 	CommonUtils::preloadAudioResources();
 
@@ -50,4 +72,11 @@ bool SplashScene::init()
  {
 		auto scene = MainMenuScene::createScene();
 		 Director::getInstance()->replaceScene(scene);
+ }
+
+ void SplashScene::touchAudioButton( cocos2d::Ref *pSender )
+ {
+	 auto mlabel = (MenuItemLabel*)(this->getChildByTag(UI_WIDGET_TAG::WELCOME_MENU)->getChildByTag(WELCOME_LABEL));
+	 mlabel->setScale(5.0f);
+	 mlabel->setString("@  @\n ### ");
  }

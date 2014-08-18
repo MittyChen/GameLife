@@ -1,6 +1,7 @@
 #include "MainMenuScene.h"
 #include "GameScene.h"
 #include "CommonUtils.h"
+#include "ConstUITags.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -44,18 +45,6 @@ bool MainMenuScene::init()
 	startText->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height*1/4 ));
 	this->addChild(startText, 1);
 	startText->runAction( CCRepeatForever::create(Sequence::create(FadeOut::create(1.0f),FadeIn::create(1.0f),NULL)));
-
-
-  //  auto closeItem = MenuItemImage::create(
-  //                                         "CloseNormal.png",
-  //                                         "CloseSelected.png",
-  //                                         CC_CALLBACK_1(MainMenuScene::menuCloseCallback, this));
-  //  
-		//closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-  //                              origin.y + closeItem->getContentSize().height/2));
-		//closeItem->setTag(UI_WIDGET_TAG::EXIT_GAME_BUTTON);
-
-
 
 		const char* onOrCloseStr = "";
 		if(audioIsOn)

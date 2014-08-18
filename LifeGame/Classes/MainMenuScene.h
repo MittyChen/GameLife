@@ -2,7 +2,6 @@
 #define __MainMenuScene_SCENE_H__
 
 #include "cocos2d.h"
-
  
 class MainMenuScene : public cocos2d::Layer
 {
@@ -28,13 +27,7 @@ public:
 	void touchAudioEffeectButton( Ref *pSender);
 
 private:
-	enum UI_WIDGET_TAG
-	{
-		MENU_AUDIOS,
-		EXIT_GAME_BUTTON,
-		AUDIO_BG_BUTTON,
-		AUDIO_EFFECT_BUTTON
-	};
+
 
 };
 

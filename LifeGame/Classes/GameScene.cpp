@@ -1,5 +1,5 @@
 #include "GameScene.h"
-
+#include "CommonUtils.h"
 USING_NS_CC;
 
 Scene* GameScene::createScene()
@@ -46,7 +46,9 @@ bool GameScene::init()
     //this->addChild(titleText, 1);
 
  
+	 god =LifeGameGod::create();
 
+	 god->getCellList();
 
 	{//touch event
 		auto event =EventListenerTouchOneByOne::create();
@@ -55,8 +57,7 @@ bool GameScene::init()
 		event->onTouchEnded = CC_CALLBACK_2(GameScene::onTouchEnded,this);
 		event->onTouchMoved = CC_CALLBACK_2(GameScene::onTouchMoved,this);
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(event,this);
-	}
-	 
+	} 
     return true;
 }
 
@@ -97,4 +98,27 @@ void GameScene::onTouchEnded(Touch *touch, Event *unused_event)
 void GameScene::onTouchCancelled(Touch *touch, Event *unused_event)
 {
 
+}
+
+void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	_customCommand.init(_globalZOrder);
+	_customCommand.func = CC_CALLBACK_0(GameScene::onDraw, this, transform, flags);
+	renderer->addCommand(&_customCommand);
+}
+void GameScene::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	Director* director = Director::getInstance();
+	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
+	CHECK_GL_ERROR_DEBUG();
+
+
+	Vec2 points[] = { Vec2(300,300)};
+	DrawPrimitives::setPointSize(16);
+	DrawPrimitives::setDrawColor4B(0,100,255,255);
+	DrawPrimitives::drawPoints( points, 1);
+ 
+	//end draw
+	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }

@@ -23,11 +23,10 @@ public:
 	virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
 	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
 	virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+
+	virtual void update(float delta);
 	void touchAudioButton( cocos2d::Ref *pSender);
 	void touchAudioEffeectButton( Ref *pSender);
-
-private:
-
 
 };
 

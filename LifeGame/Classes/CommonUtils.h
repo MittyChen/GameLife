@@ -12,12 +12,16 @@ public:
 	static void playBackgrondMusic();
 	static void playButtonTouchMusic();
 	static void setEffectMusicShouldPlay(bool val);
-	//static void drawPointsAroundGeometric(cocos2d::Vector<Vec2*> pointPositions);
-	//enum   GEOMETRIC_TYPE
-	//{
-	//};
+	static void initNightShaders();
+	static void dispatchNightShaders();
+	static void setNightGLprogram(cocos2d::Node* val);
 private:
 	static bool effectMusicShouldPlay;
+	static float nightDarkRate;
+	static cocos2d::GLProgramState* _glprogramstate;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	static cocos2d::EventListenerCustom* _backgroundListener;
+#endif
 	
 };
 

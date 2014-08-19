@@ -2,8 +2,9 @@
 #define __GameScene_SCENE_H__
 
 #include "cocos2d.h"
+#include "LifegameGod.h"
 
- 
+ using namespace cocos2d;
 class GameScene : public cocos2d::Layer
 {
 public:
@@ -25,7 +26,11 @@ public:
 	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
 	virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
 
-
+	  virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+protected:
+	void onDraw(const Mat4 &transform, uint32_t flags);
+	 CustomCommand _customCommand;
+	 LifeGameGod* god;
 };
 
 #endif // __GameScene_SCENE_H__

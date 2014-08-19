@@ -26,8 +26,8 @@ bool MainMenuScene::init()
     if ( !Layer::init() )
     {
         return false;
-    }
-    
+    } 
+
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -36,15 +36,30 @@ bool MainMenuScene::init()
 
 
 	auto titleText = LabelTTF::create("Life Game", "epson1", 80);
-	titleText->setColor(Color3B(0.0f,128.0f,255.0f));
-	titleText->setPosition(Vec2(origin.x + visibleSize.width/2,   origin.y + visibleSize.height/2 +  titleText->getContentSize().height));
-	this->addChild(titleText, 1);
 
+	auto  titleTextLabel = MenuItemLabel::create(
+		titleText,
+		CC_CALLBACK_1(MainMenuScene::touchAudioButton, this));
+	
+	titleTextLabel->setTag(UI_WIDGET_TAG::AUDIO_TITLE_LABEL);
+	titleTextLabel->setColor(Color3B(0.0f,128.0f,255.0f));
+	titleTextLabel->setPosition(Vec2(origin.x + visibleSize.width/2,   origin.y + visibleSize.height/2 +  titleTextLabel->getContentSize().height));
+	//this->addChild(titleText, 1);
+
+
+	/*auto mTopLayer = LayerColor::create(ccc4(100,100,255,255));
+			mTopLayer->setZOrder(-1);
+			this->addChild(mTopLayer);*/
+	
 	auto startText = LabelTTF::create("Touch Screen", "epson1", 30);
-	startText->setColor(Color3B(0.0f,128.0f,255.0f));
-	startText->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height*1/4 ));
-	this->addChild(startText, 1);
-	startText->runAction( CCRepeatForever::create(Sequence::create(FadeOut::create(1.0f),FadeIn::create(1.0f),NULL)));
+	auto startTextLabel = MenuItemLabel::create(
+		startText,
+		CC_CALLBACK_1(MainMenuScene::touchAudioButton, this));
+
+	startTextLabel->setColor(Color3B(0.0f,128.0f,255.0f));
+	startTextLabel->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height*1/4 ));
+	 startTextLabel->setTag(UI_WIDGET_TAG::AUDIO_TOUCH_START);
+	startTextLabel->runAction( CCRepeatForever::create(Sequence::create(FadeOut::create(1.0f),FadeIn::create(1.0f),NULL)));
 
 		const char* onOrCloseStr = "";
 		if(audioIsOn)
@@ -60,7 +75,7 @@ bool MainMenuScene::init()
 
 		audioTextLabel->setColor(Color3B(0.0f,128.0f,255.0f));
 		audioTextLabel->setAnchorPoint(Vec2(0.5f,0.5f));
-		audioTextLabel->setPosition(Vec2(startText->getPosition().x,   startText->getPosition().y + 2*audioText->getContentSize().height));
+		audioTextLabel->setPosition(Vec2(startTextLabel->getPosition().x,   startTextLabel->getPosition().y + 2*audioTextLabel->getContentSize().height));
 		 audioTextLabel->setTag(UI_WIDGET_TAG::AUDIO_BG_BUTTON);
 
 
@@ -80,13 +95,18 @@ bool MainMenuScene::init()
 			CC_CALLBACK_1(MainMenuScene::touchAudioEffeectButton, this));
 		audioEffectLabel->setColor(Color3B(0.0f,128.0f,255.0f));
 		audioEffectLabel->setAnchorPoint(Vec2(0.5f,0.5f));
-		audioEffectLabel->setPosition(Vec2(audioTextLabel->getPosition().x,   audioTextLabel->getPosition().y + 2*audioEffectText->getContentSize().height));
+		audioEffectLabel->setPosition(Vec2(audioTextLabel->getPosition().x,   audioTextLabel->getPosition().y + 2*audioEffectLabel->getContentSize().height));
 		audioEffectLabel->setTag(UI_WIDGET_TAG::AUDIO_EFFECT_BUTTON);
 	
-		auto menu = Menu::create( audioTextLabel,audioEffectLabel,NULL);
-		menu->setPosition(Vec2::ZERO);
+		CommonUtils::initNightShaders();
+		CommonUtils::setNightGLprogram(audioEffectLabel);
+		auto menu = Menu::create(startTextLabel, titleTextLabel,audioTextLabel,audioEffectLabel,NULL);
+		menu->setPosition(Vec2(0,origin.y + visibleSize.height));
 		menu->setTag(UI_WIDGET_TAG::MENU_AUDIOS);
 		this->addChild(menu, 1);
+		menu->runAction(MoveTo::create(4.0f,Vec2::ZERO));
+		/*menu->runAction(CCRepeatForever::create((Sequence::create(MoveTo::create(1.0f,Vec2(menu->getPosition().x+10 , menu->getPosition().y))
+		,MoveTo::create(1.0f,Vec2(menu->getPosition().x-10 , menu->getPosition().y)),NULL))));*/
 
 	//Sound Block
 	{
@@ -108,7 +128,9 @@ bool MainMenuScene::init()
 
 
 
-
+	{
+		scheduleUpdate();
+	}
 	
     return true;
 }
@@ -210,3 +232,7 @@ void MainMenuScene::touchAudioEffeectButton( Ref *pSender)
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+void MainMenuScene::update( float delta )
+{
+	 
+}

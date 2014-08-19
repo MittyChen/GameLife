@@ -11,8 +11,8 @@ public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();  
 	 void goGameScene(float t);
-	 void touchAudioButton( cocos2d::Ref *pSender);
 	CREATE_FUNC(SplashScene);
+	void touchWelcomeButton( cocos2d::Ref *pSender );
 };
 
 #endif // __SPLASH_SCENE_H__

@@ -30,14 +30,15 @@ void LifeGameGod::updateWorld( float delta )
 	for(int i = 0;i<getCellCount();i++)
 	{
 		SingleCell* mcell = cellList.at(i);
-		mcell->updateChangeFlag(getCellsAroundTargetCell(mcell->getPositionIndex()) );
+		 
+		mcell->updateChangeFlag(getCellsAroundTargetCell(mcell->getPositionIndexX(),mcell->getPositionIndexY()) );
 	}
 }
 
 void LifeGameGod::gameStart()
 {
 	this->unschedule(schedule_selector( LifeGameGod::update));
-	schedule(schedule_selector( LifeGameGod::updateWorld) ,0.1f,kRepeatForever, 0.0f);
+	schedule(schedule_selector( LifeGameGod::updateWorld) ,1.0f,kRepeatForever, 0.0f);
 }
 
 
@@ -70,15 +71,20 @@ bool LifeGameGod::init()
 }
 
 //获取周围的八个cell
-cocos2d::Vector<SingleCell*> LifeGameGod::getCellsAroundTargetCell( cocos2d::Vec2 val )
+cocos2d::Vector<SingleCell*> LifeGameGod::getCellsAroundTargetCell( int x,int y)
 {
 	cocos2d::Vector<SingleCell*> mcells ;
-
+	CCLOG("LifeGameGod::getCellsAroundTargetCell  [%d %d]",x,y );
 	for(int i = 0;i<getCellCount();i++)
 	{
-		if(abs(cellList.at(i)->getPositionIndex().x - val.x) <= 1 &&  abs(cellList.at(i)->getPositionIndex().y - val.y) <=1  )//周围的  最多八个
+		if(abs(cellList.at(i)->getPositionIndexX() - x) <= 1 &&  abs(cellList.at(i)->getPositionIndexY() - y) <=1  )//周围的  最多八个
 		{
-			mcells.pushBack(cellList.at(i));
+			if(!(abs(cellList.at(i)->getPositionIndexX() - x)  == 0 && abs(cellList.at(i)->getPositionIndexY() - y)==0) )
+			{
+				CCLOG("mcell add   %d %d",cellList.at(i)->getPositionIndexX(),cellList.at(i)->getPositionIndexY());
+				mcells.pushBack(cellList.at(i));
+			}
+
 		}
 	}
 	return mcells;
@@ -92,8 +98,9 @@ void LifeGameGod::seedAllCells()
 		for(int j = 0 ;j < horizenCount; j++)
 		{
 			SingleCell* cell = SingleCell::create();
-			cell->setTag(cellList.size()-1); 
-			cell->setPositionIndex(Vec2(i,j));
+			cell->setTag(cellList.size()); 
+			
+			cell->setPositionIndex(i,j);
 			cell->setPosition(Vec2(i*40,j*40)); 
 			cellList.pushBack(cell);
 			this->addChild(cell);

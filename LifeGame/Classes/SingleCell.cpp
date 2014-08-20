@@ -31,7 +31,7 @@ CELL_LIVNG_STATE SingleCell::getNextState()
 	return currentLivingState;
 }
 
-void SingleCell::changeState( )
+void SingleCell::changeState()
 {
 		currentLivingState = getNextState();
 		if(currentLivingState == DEAD_STATE)
@@ -105,15 +105,21 @@ void SingleCell::updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround )
 }
 
  
-void SingleCell::setPositionIndex( cocos2d::Vec2 val )
+void SingleCell::setPositionIndex(int valX,int valY )
 {
-	posi = val;
+	 xIndex= valX;
+	 yIndex = valY;
 }
 
-cocos2d::Vec2 SingleCell::getPositionIndex()
+int SingleCell::getPositionIndexX()
 {
-	return posi;
+	return xIndex;
 }
+int  SingleCell::getPositionIndexY()
+{
+	return yIndex;
+}
+
 
 void SingleCell::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {

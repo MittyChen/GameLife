@@ -15,9 +15,10 @@ public:
 	SingleCell(void);
 	~SingleCell(void);
 	CREATE_FUNC(SingleCell);
-	virtual bool init();
-	void setPositionIndex(cocos2d::Vec2 val);
-	cocos2d::Vec2 getPositionIndex();
+	virtual bool init(); 
+	void setPositionIndex(int valX,int valY );
+	int getPositionIndexX();
+	int getPositionIndexY();
 	CELL_LIVNG_STATE getCurrentLivingState();
 	void setChangeFlag();
 	void updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround );
@@ -30,6 +31,8 @@ private:
 	CELL_LIVNG_STATE lastLivingState;
 	bool needChangeState;
 	cocos2d::Vec2 posi;
+	int xIndex;
+	int yIndex;
 protected:
 	 cocos2d::CustomCommand _customCommand;
 	  cocos2d::EventListenerTouchOneByOne *event;

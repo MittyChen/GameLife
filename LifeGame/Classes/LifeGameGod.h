@@ -17,7 +17,7 @@ public:
 	void addCell();
 	int getCellCount();
 	void noticeACellToChange( SingleCell *targetCell );
-	cocos2d::Vector<SingleCell*> getCellsAroundTargetCell(cocos2d::Vec2 val);
+	cocos2d::Vector<SingleCell*> getCellsAroundTargetCell( int x,int y);
 	cocos2d::Vector<SingleCell*> getCellList();
 
 

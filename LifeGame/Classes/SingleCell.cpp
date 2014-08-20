@@ -5,7 +5,7 @@ using namespace cocos2d;
 
 SingleCell::SingleCell(void)
 {
-	currentLivingState = CELL_LIVNG_STATE::DEAD_STATE;
+	
 }
 
 
@@ -31,33 +31,31 @@ CELL_LIVNG_STATE SingleCell::getNextState()
 	return currentLivingState;
 }
 
-void SingleCell::update( float delta )
+void SingleCell::changeState( )
 {
-	if(needChangeState)
-	{
 		currentLivingState = getNextState();
-		needChangeState = false;
-	}
+		if(currentLivingState == DEAD_STATE)
+		{
+			this->setColor(Color3B(255,0,255));
+		}else{
+			this->setColor(Color3B(0,100,0));
+		}
 }
 
 bool SingleCell::init()
 {
-	if(!Node::init())
+	if(!LayerColor::init())
 	{
 		return false;
 	}
 
+	this->initWithColor(Color4B(0.0f,0.0f,0.0f,255));
+
+	currentLivingState = CELL_LIVNG_STATE::DEAD_STATE;
+	this->setColor(Color3B(255,0,255));
 
 
-	{//touch event
-		auto event = EventListenerTouchOneByOne::create();
-		event->onTouchBegan = CC_CALLBACK_2(SingleCell::onTouchBegan,this);
-		event->onTouchCancelled = CC_CALLBACK_2(SingleCell::onTouchCancelled,this);
-		event->onTouchEnded = CC_CALLBACK_2(SingleCell::onTouchEnded,this);
-		event->onTouchMoved = CC_CALLBACK_2(SingleCell::onTouchMoved,this);
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(event,this);
-	}
-
+	this->setContentSize(Size(30,30));
 
 	return true;
 
@@ -73,17 +71,9 @@ void SingleCell::setChangeFlag()
 	needChangeState = true;
 }
 
-void SingleCell::setPosition( cocos2d::Vec2 val )
-{
-	posi = val;
-}
 
-cocos2d::Vec2 SingleCell::getPosition()
-{
-	return posi;
-}
 
-bool SingleCell::updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround )
+void SingleCell::updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround )
 {
 	int count = cellsAround.size();
 	int livingSum = 0;
@@ -92,18 +82,20 @@ bool SingleCell::updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround )
 		livingSum+= (int)cellsAround.at(i)->getCurrentLivingState();
 	}
 
+	CCLOG("SingleCell::updateChangeFlag  [ %d  %d] ",livingSum,currentLivingState);
+
 	if(livingSum>3 || livingSum < 2)//如果多余三个 活着就去死
 	{
 		if(currentLivingState == LIVING_STATE)
 		{
-			needChangeState = true;
+			changeState();
 		}
 	}
 	if(livingSum = 3)//如果等于三个 死了就复活
 	{
 		if(currentLivingState == DEAD_STATE)
 		{
-			needChangeState = true;
+			changeState();
 		}
 	}
 	if(livingSum = 2)//如果等于两个 保持不变
@@ -112,24 +104,20 @@ bool SingleCell::updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround )
 	}
 }
 
-
-bool SingleCell::onTouchBegan(Touch *touch, Event *unused_event)
+ 
+void SingleCell::setPositionIndex( cocos2d::Vec2 val )
 {
-	CCLOG("SingleCell::onTouchBegan");
-	return true;
+	posi = val;
 }
 
-void SingleCell::onTouchMoved(Touch *touch, Event *unused_event)
+cocos2d::Vec2 SingleCell::getPositionIndex()
 {
-
+	return posi;
 }
 
-void SingleCell::onTouchEnded(Touch *touch, Event *unused_event)
+void SingleCell::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-
-}
-
-void SingleCell::onTouchCancelled(Touch *touch, Event *unused_event)
-{
-
+	LayerColor::draw(renderer,transform,flags);
+	_customCommand.init(_globalZOrder);
+	renderer->addCommand(&_customCommand);
 }

@@ -25,11 +25,7 @@ public:
 	virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
 	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
 	virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
-
-	  virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
-protected:
-	void onDraw(const Mat4 &transform, uint32_t flags);
-	 CustomCommand _customCommand;
+private:
 	 LifeGameGod* god;
 };
 

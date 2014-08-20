@@ -15,27 +15,23 @@ public:
 	SingleCell(void);
 	~SingleCell(void);
 	CREATE_FUNC(SingleCell);
-	void update(float delta);
 	virtual bool init();
-
-
-	void setPosition(cocos2d::Vec2 val);
-	cocos2d::Vec2 getPosition();
+	void setPositionIndex(cocos2d::Vec2 val);
+	cocos2d::Vec2 getPositionIndex();
 	CELL_LIVNG_STATE getCurrentLivingState();
 	void setChangeFlag();
-	bool updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround );
-
-	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *unused_event);
-	virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
-	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
-	virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
-
-
+	void updateChangeFlag( cocos2d::Vector<SingleCell*> cellsAround );
+	  	void changeState( );
+	  virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
 private: 
 	CELL_LIVNG_STATE getNextState();
+
 	CELL_LIVNG_STATE currentLivingState;
 	CELL_LIVNG_STATE lastLivingState;
 	bool needChangeState;
 	cocos2d::Vec2 posi;
+protected:
+	 cocos2d::CustomCommand _customCommand;
+	  cocos2d::EventListenerTouchOneByOne *event;
 };
 

@@ -4,7 +4,7 @@
 #include "SingleCell.h"
 
 class LifeGameGod :
-	public cocos2d::Node
+	public cocos2d::Layer
 {
 public:
 	LifeGameGod(void);
@@ -19,9 +19,20 @@ public:
 	void noticeACellToChange( SingleCell *targetCell );
 	cocos2d::Vector<SingleCell*> getCellsAroundTargetCell(cocos2d::Vec2 val);
 	cocos2d::Vector<SingleCell*> getCellList();
+
+
+	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+	virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+	virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+	bool touchBegain(Ref* pSender);
+	void updateWorld( float delta );
+	void gameStart();
+
 private:
 	cocos2d::Vector<SingleCell*> cellList;
 	int horizenCount;//横向方格数
 	int verticalCount;//竖向方格数
+
 };
 

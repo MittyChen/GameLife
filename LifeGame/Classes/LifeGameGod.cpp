@@ -1,5 +1,5 @@
 #include "LifeGameGod.h"
-
+#include "ConstCells.h"
 using namespace cocos2d;
 LifeGameGod::LifeGameGod(void)
 {
@@ -25,20 +25,16 @@ void LifeGameGod::update( float delta )
 }
 
 
-void LifeGameGod::updateWorld( float delta )
+ 
+
+void LifeGameGod::gameStart()
 {
 	for(int i = 0;i<getCellCount();i++)
 	{
 		SingleCell* mcell = cellList.at(i);
-		 
-		mcell->updateChangeFlag(getCellsAroundTargetCell(mcell->getPositionIndexX(),mcell->getPositionIndexY()) );
+		mcell->updateTheSituation();
 	}
-}
-
-void LifeGameGod::gameStart()
-{
-	this->unschedule(schedule_selector( LifeGameGod::update));
-	schedule(schedule_selector( LifeGameGod::updateWorld) ,1.0f,kRepeatForever, 0.0f);
+	schedule(schedule_selector( LifeGameGod::updateCells), CELLS_UPDATE_BREAK_TIME,kRepeatForever, 0.0f);
 }
 
 
@@ -48,8 +44,6 @@ bool LifeGameGod::init()
 	{
 		return false;
 	}
-	 horizenCount = 10;
-	 verticalCount =10;
 
 	 seedAllCells();
 	  
@@ -61,11 +55,7 @@ bool LifeGameGod::init()
 		 event->onTouchMoved = CC_CALLBACK_2(LifeGameGod::onTouchMoved,this);
 		 event->setSwallowTouches(true);
 		 _eventDispatcher->addEventListenerWithSceneGraphPriority(event,this);
-		/*_eventDispatcher->addEventListenerWithFixedPriority(event,-100);*/
-
-	 }
-	  
-	schedule(schedule_selector( LifeGameGod::update) ,0.1f,kRepeatForever, 0.0f);
+	 } 
 
 	return true;
 }
@@ -79,33 +69,38 @@ cocos2d::Vector<SingleCell*> LifeGameGod::getCellsAroundTargetCell( int x,int y)
 	{
 		if(abs(cellList.at(i)->getPositionIndexX() - x) <= 1 &&  abs(cellList.at(i)->getPositionIndexY() - y) <=1  )//周围的  最多八个
 		{
-			if(!(abs(cellList.at(i)->getPositionIndexX() - x)  == 0 && abs(cellList.at(i)->getPositionIndexY() - y)==0) )
+			if(!(cellList.at(i)->getPositionIndexX() == x  && cellList.at(i)->getPositionIndexY() == y) )
 			{
-				CCLOG("mcell add   %d %d",cellList.at(i)->getPositionIndexX(),cellList.at(i)->getPositionIndexY());
 				mcells.pushBack(cellList.at(i));
 			}
 
 		}
 	}
+
 	return mcells;
 }
 
 
 void LifeGameGod::seedAllCells()
 {
-	for(int i = 0 ;i < verticalCount ; i++)
+	for(int i = 0 ;i < CELLS_VERTICAL_COUNT ; i++)
 	{
-		for(int j = 0 ;j < horizenCount; j++)
+		for(int j = 0 ;j < CELLS_HORIZEN_COUNT; j++)
 		{
 			SingleCell* cell = SingleCell::create();
 			cell->setTag(cellList.size()); 
-			
-			cell->setPositionIndex(i,j);
-			cell->setPosition(Vec2(i*40,j*40)); 
+			cell->setPositionIndex(i,j); 
+			cell->setPosition(Vec2(i*(CELLS_WIDTH+CELLS_WIDTH_SPEACING),j*(CELLS_HEIGHT+CELLS_HEIGHT_SPEACING))); 
 			cellList.pushBack(cell);
 			this->addChild(cell);
 		}
 	}
+	 
+	for(int i = 0;i<getCellCount();i++)
+	{
+		SingleCell* mcell = cellList.at(i);
+		mcell->setCellsAround(getCellsAroundTargetCell(mcell->getPositionIndexX(),mcell->getPositionIndexY()));
+	} 
 }
 
 cocos2d::Vector<SingleCell*> LifeGameGod::getCellList()
@@ -116,37 +111,56 @@ cocos2d::Vector<SingleCell*> LifeGameGod::getCellList()
 
 bool LifeGameGod::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	CCLOG("LifeGameGod::onTouchBegan 0  ");
 	Vec2 pos = touch->getLocation();
-	int  line= (pos.x-this->getPosition().x)/40;
-	int row = (pos.y-this->getPosition().y)/40;
-	if((row + line * 10) < cellList.size() && (row + line * 10) >=0 )
+	int  line= (pos.x-this->getPosition().x)/(CELLS_WIDTH+CELLS_WIDTH_SPEACING);
+	int row = (pos.y-this->getPosition().y)/( CELLS_HEIGHT+CELLS_HEIGHT_SPEACING);
+	if((row + line * CELLS_HORIZEN_COUNT) < cellList.size() && (row + line * CELLS_HORIZEN_COUNT) >=0 )
 	{
-		SingleCell* mcell  =  cellList.at(row + line * 10);
+		SingleCell* mcell  =  cellList.at(row + line * CELLS_HORIZEN_COUNT);
 		mcell->changeState();
+		mcell->updateCellColor();
 	} 
 	return true;
 }
 void LifeGameGod::onTouchMoved(Touch *touch, Event *unused_event)
 {
-	CCLOG("LifeGameGod::onTouchMoved");
-
 	Vec2 pos = touch->getLocation();
-	int  line= (pos.x-this->getPosition().x)/40;
-	int row = (pos.y-this->getPosition().y)/40;
-	if((row + line * 10) < cellList.size() && (row + line * 10) >=0 )
+	int  line= (pos.x-this->getPosition().x)/(CELLS_WIDTH+CELLS_WIDTH_SPEACING);
+	int row = (pos.y-this->getPosition().y)/( CELLS_HEIGHT+CELLS_HEIGHT_SPEACING);
+	if((row + line * CELLS_HORIZEN_COUNT) < cellList.size() && (row + line * CELLS_HORIZEN_COUNT) >=0 )
 	{
-		SingleCell* mcell  =  cellList.at(row + line * 10);
+		SingleCell* mcell  =  cellList.at(row + line * CELLS_HORIZEN_COUNT);
 		mcell->changeState();
+		mcell->updateCellColor();
 	}
 }
 
 void LifeGameGod::onTouchEnded(Touch *touch, Event *unused_event)
 {
-	CCLOG("LifeGameGod::onTouchEnded");
 }
 
 void LifeGameGod::onTouchCancelled(Touch *touch, Event *unused_event)
 {
-	CCLOG("LifeGameGod::onTouchCancelled");
+}
+
+void LifeGameGod::updateCells( float delta )
+{
+	for(int i = 0;i<getCellCount();i++)
+	{
+		SingleCell* mcell = cellList.at(i);
+
+		mcell->updateTheSituation();
+	}
+	for(int i = 0;i<getCellCount();i++)
+	{
+		SingleCell* mcell = cellList.at(i); 
+		mcell->updateCellState();
+	} 
+
+	for(int i = 0;i<getCellCount();i++)
+	{
+		SingleCell* mcell = cellList.at(i); 
+		mcell->updateCellColor();
+	} 
+
 }

@@ -12,7 +12,7 @@ public:
 	CREATE_FUNC(LifeGameGod);
 	void update(float delta);
 	virtual bool init();
-
+	void updateCells(float delta);
 	void seedAllCells();
 	void addCell();
 	int getCellCount();
@@ -33,6 +33,7 @@ private:
 	cocos2d::Vector<SingleCell*> cellList;
 	int horizenCount;//横向方格数
 	int verticalCount;//竖向方格数
+ 
 
 };
 

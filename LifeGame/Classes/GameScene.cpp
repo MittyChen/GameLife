@@ -1,6 +1,8 @@
 #include "GameScene.h"
 #include "CommonUtils.h"
+
 USING_NS_CC;
+using namespace  ui;
 
 Scene* GameScene::createScene()
 {
@@ -47,9 +49,8 @@ bool GameScene::init()
 
  
 	 god =LifeGameGod::create();
-	 god->setPosition(150,150);
+	
 	this->addChild(god);
-
 
 	{//touch event
 		auto event =EventListenerTouchOneByOne::create();

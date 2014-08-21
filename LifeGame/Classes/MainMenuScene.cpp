@@ -76,7 +76,7 @@ bool MainMenuScene::init()
 		audioTextLabel->setColor(Color3B(0.0f,128.0f,255.0f));
 		audioTextLabel->setAnchorPoint(Vec2(0.5f,0.5f));
 		audioTextLabel->setPosition(Vec2(startTextLabel->getPosition().x,   startTextLabel->getPosition().y + 2*audioTextLabel->getContentSize().height));
-		 audioTextLabel->setTag(UI_WIDGET_TAG::AUDIO_BG_BUTTON);
+		audioTextLabel->setTag(UI_WIDGET_TAG::AUDIO_BG_BUTTON);
 
 
 

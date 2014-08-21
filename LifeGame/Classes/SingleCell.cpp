@@ -44,14 +44,10 @@ bool SingleCell::init()
 	}
 
 	this->initWithColor(Color4B(0.0f,0.0f,0.0f,255));
-
-	currentLivingState = CELL_LIVNG_STATE::DEAD_STATE;
 	this->setColor(DEAD_COLOR); 
-	this->setContentSize(Size(CELLS_WIDTH,CELLS_HEIGHT));
+	currentLivingState = CELL_LIVNG_STATE::DEAD_STATE;
 	lastLivingSumAround = 0;
 	this->scheduleUpdate();
-
-	
 
 	return true;
 }
@@ -101,24 +97,6 @@ void SingleCell::updateCellState()
 	}
 
 	lastLivingSumAround = livingSum;//更新存货环境
-
-	//if(livingSum>3 || livingSum < 2)//如果多余三个 活着就去死
-	//{
-	//	if(currentLivingState == LIVING_STATE)
-	//	{
-	//		changeState();
-	//		needChangeState = true;
-	//	}
-	//}
-
-	//if(livingSum ==  3)//如果等于三个 死了就复活
-	//{
-	//	if(currentLivingState == DEAD_STATE)
-	//	{
-	//		changeState();
-	//		needChangeState = true;
-	//	}
-	//}
 }
 
  
@@ -160,16 +138,6 @@ void SingleCell::setCellsAround( cocos2d::Vector<SingleCell*> val )
 	cellsAround = val;
 }
 
-void SingleCell::startLifeJourney()
-{
-	//schedule(schedule_selector( SingleCell::updateState), 0.5f,kRepeatForever, 0.0f);
-}
-
-void SingleCell::endLifeJourney()
-{
-	//unschedule(schedule_selector( SingleCell::updateState));
-}
-
 void SingleCell::updateCellColor()
 {
 	if(needChangeState)
@@ -188,10 +156,7 @@ void SingleCell::updateTheSituation()
 	int count = cellsAround.size();
 	lastLivingSumAround = 0;
 	for(int i=0; i<count; i++)//获取初始的周边存活环境
-	{
-		if(cellsAround.at(i)->getCurrentLivingState() == LIVING_STATE)
-		{
-				lastLivingSumAround++;
-		}
+	{ 
+		lastLivingSumAround += cellsAround.at(i)->getCurrentLivingState();
 	} 
 }

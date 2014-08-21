@@ -2,6 +2,7 @@
 #include "MainMenuScene.h"
 #include "CommonUtils.h"
 #include "ConstUITags.h"
+#include "LifeGameGod.h" 
 USING_NS_CC;
 
 using namespace  CocosDenshion;
@@ -60,6 +61,7 @@ bool SplashScene::init()
 	FadeOut* mFade =  FadeOut::create(3.0f);
 	sprite->runAction(mFade);
 	scheduleOnce(schedule_selector(SplashScene::goGameScene) , 3.0f);*/
+
 
 	CommonUtils::preloadAudioResources();
 

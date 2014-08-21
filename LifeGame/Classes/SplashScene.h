@@ -13,6 +13,7 @@ public:
 	 void goGameScene(float t);
 	CREATE_FUNC(SplashScene);
 	void touchWelcomeButton( cocos2d::Ref *pSender );
+
 };
 
 #endif // __SPLASH_SCENE_H__

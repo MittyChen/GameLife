@@ -9,11 +9,6 @@ LifeGameGod::LifeGameGod(void)
 LifeGameGod::~LifeGameGod(void)
 {
 }
-//通知状态改变
-void LifeGameGod::noticeACellToChange( SingleCell *targetCell )
-{
-	targetCell->setChangeFlag();
-}
 
 int LifeGameGod::getCellCount()
 {
@@ -45,7 +40,7 @@ bool LifeGameGod::init()
 		return false;
 	}
 
-	 seedAllCells();
+	
 	  
 	 {//touch event
 		 auto event = EventListenerTouchOneByOne::create();
@@ -55,9 +50,15 @@ bool LifeGameGod::init()
 		 event->onTouchMoved = CC_CALLBACK_2(LifeGameGod::onTouchMoved,this);
 		 event->setSwallowTouches(true);
 		 _eventDispatcher->addEventListenerWithSceneGraphPriority(event,this);
-	 } 
-
-	return true;
+	 Size visibleSize = Director::getInstance()->getVisibleSize();
+	 Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	CELLS_HEIGHT = visibleSize.height * 0.9 / CELLS_VERTICAL_COUNT  - CELLS_HEIGHT_SPEACING;
+	CELLS_WIDTH = CELLS_HEIGHT; 
+	this->setPosition(visibleSize.height*0.05,visibleSize.height*0.05);
+	 }
+	 
+	  seedAllCells();
+	 return true;
 }
 
 //获取周围的八个cell
@@ -72,8 +73,7 @@ cocos2d::Vector<SingleCell*> LifeGameGod::getCellsAroundTargetCell( int x,int y)
 			if(!(cellList.at(i)->getPositionIndexX() == x  && cellList.at(i)->getPositionIndexY() == y) )
 			{
 				mcells.pushBack(cellList.at(i));
-			}
-
+			} 
 		}
 	}
 
@@ -88,7 +88,8 @@ void LifeGameGod::seedAllCells()
 		for(int j = 0 ;j < CELLS_HORIZEN_COUNT; j++)
 		{
 			SingleCell* cell = SingleCell::create();
-			cell->setTag(cellList.size()); 
+			cell->setTag(cellList.size());
+			cell->setContentSize(Size(CELLS_WIDTH,CELLS_HEIGHT));
 			cell->setPositionIndex(i,j); 
 			cell->setPosition(Vec2(i*(CELLS_WIDTH+CELLS_WIDTH_SPEACING),j*(CELLS_HEIGHT+CELLS_HEIGHT_SPEACING))); 
 			cellList.pushBack(cell);

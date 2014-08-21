@@ -16,40 +16,37 @@ public:
 	~SingleCell(void);
 	CREATE_FUNC(SingleCell);
 	virtual bool init(); 
-	void update(float delta);
+	virtual void update(float delta);
+	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
 
+	//Î»ÖÃË÷Òý
 	void setPositionIndex(int valX,int valY );
 	int getPositionIndexX();
 	int getPositionIndexY();
+
+	//´æ»î×´Ì¬
 	CELL_LIVNG_STATE getCurrentLivingState();
 	void setChangeFlag();
 	bool isNeedChange();
-	void updateCellState();
-	void updateCellColor();
-	void changeState( );
-	void updateTheSituation();
-	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
 
+
+	void updateCellState();
+	void changeState( );
+	void updateCellColor();
+	void updateTheSituation();
+	  
 	cocos2d::Vector<SingleCell*> getCellsAround();
 	void setCellsAround(cocos2d::Vector<SingleCell*> val);
-	void startLifeJourney();
-	void endLifeJourney();
 private: 
 	CELL_LIVNG_STATE getNextState();
-
 	CELL_LIVNG_STATE currentLivingState;
-	CELL_LIVNG_STATE lastLivingState;
-
 	cocos2d::Vector<SingleCell*> cellsAround;
-
 	int lastLivingSumAround;
-
 	bool needChangeState;
-	cocos2d::Vec2 posi;
 	int xIndex;
 	int yIndex;
 protected:
 	 cocos2d::CustomCommand _customCommand;
-	 cocos2d::EventListenerTouchOneByOne *event;
+	 
 };
 

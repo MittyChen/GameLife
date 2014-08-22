@@ -34,7 +34,7 @@ public:
 	void changeState( );
 	void updateCellColor();
 	void updateTheSituation();
-	  
+	
 	cocos2d::Vector<SingleCell*> getCellsAround();
 	void setCellsAround(cocos2d::Vector<SingleCell*> val);
 private: 

@@ -26,6 +26,9 @@ public:
 	cocos2d::Vector<SingleCell*> getCellList();
 
 	void gameStart();
+	void gamePause();
+	void gameResume();
+	void gameReset();
 private:
 	cocos2d::Vector<SingleCell*> cellList;
 	int horizenCount;//横向方格数
@@ -34,5 +37,6 @@ private:
 	float CELLS_HEIGHT;
 	 Size visibleSize ;
 	  Vec2 origin ;
+	  bool isRunningLife;
 };
 

@@ -35,7 +35,7 @@ bool SplashScene::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-	auto mlabel = LabelTTF::create("Do Not Touch Me", "epson1", 60);
+	auto mlabel = LabelTTF::create("No Life.No Game", "epson1", 60 * visibleSize.height / 480);
 	auto mtextLabel = MenuItemLabel::create(
 		mlabel,
 		CC_CALLBACK_1(SplashScene::touchWelcomeButton, this));
@@ -77,7 +77,7 @@ bool SplashScene::init()
 
  void SplashScene::touchWelcomeButton( cocos2d::Ref *pSender )
  {
-	 auto mlabel = (MenuItemLabel*)(this->getChildByTag(UI_WIDGET_TAG::WELCOME_MENU)->getChildByTag(WELCOME_LABEL));
-	 mlabel->setScale(5.0f);
-	 mlabel->setString("@  @\n ### ");
+//	 auto mlabel = (MenuItemLabel*)(this->getChildByTag(UI_WIDGET_TAG::WELCOME_MENU)->getChildByTag(WELCOME_LABEL));
+//	 mlabel->setScale(5.0f);
+//	 mlabel->setString("@  @\n ### ");
  }

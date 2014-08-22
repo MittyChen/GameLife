@@ -35,7 +35,7 @@ bool MainMenuScene::init()
 	bool audioEffectIsOn = UserDefault::getInstance()->getBoolForKey("AUDIO_EFFECT_ON");
 
 
-	auto titleText = LabelTTF::create("Life Game", "epson1", 80);
+	auto titleText = LabelTTF::create("LIFE GAME", "epson1", 80 * visibleSize.height / 480);
 
 	auto  titleTextLabel = MenuItemLabel::create(
 		titleText,
@@ -51,7 +51,7 @@ bool MainMenuScene::init()
 			mTopLayer->setZOrder(-1);
 			this->addChild(mTopLayer);*/
 	
-	auto startText = LabelTTF::create("Touch Screen", "epson1", 30);
+	auto startText = LabelTTF::create("Touch Screen", "epson1", 30* visibleSize.height / 480);
 	auto startTextLabel = MenuItemLabel::create(
 		startText,
 		CC_CALLBACK_1(MainMenuScene::touchAudioButton, this));
@@ -68,7 +68,7 @@ bool MainMenuScene::init()
 		}else{
 			onOrCloseStr = "Audio:OFF";
 		}
-		auto audioText = LabelTTF::create(onOrCloseStr, "epson1", 30);
+		auto audioText = LabelTTF::create(onOrCloseStr, "epson1", 30* visibleSize.height / 480);
 		auto audioTextLabel = MenuItemLabel::create(
 			audioText,
 			CC_CALLBACK_1(MainMenuScene::touchAudioButton, this));
@@ -89,7 +89,7 @@ bool MainMenuScene::init()
 		}else{
 			onOrCloseEffectStr = "Effect:OFF";
 		}
-		auto audioEffectText = LabelTTF::create(onOrCloseEffectStr, "epson1", 30);
+		auto audioEffectText = LabelTTF::create(onOrCloseEffectStr, "epson1", 30* visibleSize.height / 480);
 		auto audioEffectLabel = MenuItemLabel::create(
 			audioEffectText,
 			CC_CALLBACK_1(MainMenuScene::touchAudioEffeectButton, this));
@@ -101,7 +101,7 @@ bool MainMenuScene::init()
 		CommonUtils::initNightShaders();
 		CommonUtils::setNightGLprogram(audioEffectLabel);
 		auto menu = Menu::create(startTextLabel, titleTextLabel,audioTextLabel,audioEffectLabel,NULL);
-		menu->setPosition(Vec2(0,origin.y + visibleSize.height));
+		menu->setPosition(Vec2(0,origin.y + visibleSize.height/2));
 		menu->setTag(UI_WIDGET_TAG::MENU_AUDIOS);
 		this->addChild(menu, 1);
 		menu->runAction(MoveTo::create(4.0f,Vec2::ZERO));
@@ -182,7 +182,7 @@ void MainMenuScene::touchAudioButton( Ref *pSender)
 {
    auto mlabel = (MenuItemLabel*)(this->getChildByTag(UI_WIDGET_TAG::MENU_AUDIOS)->getChildByTag(AUDIO_BG_BUTTON));
 
-	bool audioIsOn = CCUserDefault::sharedUserDefault()->getBoolForKey("AUDIO_ON");
+	bool audioIsOn = CCUserDefault::getInstance()->getBoolForKey("AUDIO_ON");
 
 	CommonUtils::playButtonTouchMusic();
 	 
@@ -204,15 +204,15 @@ void MainMenuScene::touchAudioButton( Ref *pSender)
 			SimpleAudioEngine::getInstance()->resumeBackgroundMusic(); 
 		}
 	}
-	CCUserDefault::sharedUserDefault()->setBoolForKey("AUDIO_ON", !audioIsOn);
-	CCUserDefault::sharedUserDefault()->flush();
+	CCUserDefault::getInstance()->setBoolForKey("AUDIO_ON", !audioIsOn);
+	CCUserDefault::getInstance()->flush();
 }
 
 
 void MainMenuScene::touchAudioEffeectButton( Ref *pSender)
 {
  auto mlabel = (MenuItemLabel*)(this->getChildByTag(UI_WIDGET_TAG::MENU_AUDIOS)->getChildByTag(AUDIO_EFFECT_BUTTON));
-	bool audioEffectIsOn = CCUserDefault::sharedUserDefault()->getBoolForKey("AUDIO_EFFECT_ON");
+	bool audioEffectIsOn = CCUserDefault::getInstance()->getBoolForKey("AUDIO_EFFECT_ON");
 
 	CommonUtils::playButtonTouchMusic();
 
@@ -227,9 +227,9 @@ void MainMenuScene::touchAudioEffeectButton( Ref *pSender)
 		CommonUtils::setEffectMusicShouldPlay(false);
 		SimpleAudioEngine::getInstance()->pauseAllEffects();
 	}
-	CCUserDefault::sharedUserDefault()->setBoolForKey("AUDIO_EFFECT_ON", !audioEffectIsOn);
+	CCUserDefault::getInstance()->setBoolForKey("AUDIO_EFFECT_ON", !audioEffectIsOn);
 
-	CCUserDefault::sharedUserDefault()->flush();
+	CCUserDefault::getInstance()->flush();
 }
 
 void MainMenuScene::update( float delta )

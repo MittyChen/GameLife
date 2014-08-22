@@ -33,7 +33,9 @@ CELL_LIVNG_STATE SingleCell::getNextState()
 
 void SingleCell::changeState()
 {
+    setChangeFlag();
 		currentLivingState = getNextState();
+    
 }
 
 bool SingleCell::init()

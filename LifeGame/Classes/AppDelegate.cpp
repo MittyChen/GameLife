@@ -17,7 +17,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLView::create("LIFE GAME");
-		glview->setFrameSize(800,480); 
+		glview->setFrameSize(800,480);
         director->setOpenGLView(glview);
     }
 
@@ -29,7 +29,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     /*auto scene = SplashScene::createScene();*/
-	auto scene = GameScene::createScene();
+	auto scene = SplashScene::createScene();
     // run
     director->runWithScene(scene);
 

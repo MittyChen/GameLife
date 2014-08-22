@@ -22,16 +22,6 @@ void LifeGameGod::update( float delta )
 
  
 
-void LifeGameGod::gameStart()
-{
-	for(int i = 0;i<getCellCount();i++)
-	{
-		SingleCell* mcell = cellList.at(i);
-		mcell->updateTheSituation();
-	}
-	schedule(schedule_selector( LifeGameGod::updateCells), CELLS_UPDATE_BREAK_TIME,kRepeatForever, 0.0f);
-}
-
 
 bool LifeGameGod::init()
 {
@@ -39,7 +29,7 @@ bool LifeGameGod::init()
 	{
 		return false;
 	}
-
+	isRunningLife = false;
 	 visibleSize = Director::getInstance()->getVisibleSize();
 	  origin = Director::getInstance()->getVisibleOrigin();
 	 {//touch event
@@ -54,7 +44,7 @@ bool LifeGameGod::init()
 	 
 	CELLS_HEIGHT = visibleSize.height * 0.9 / CELLS_VERTICAL_COUNT  - CELLS_HEIGHT_SPEACING;
 	CELLS_WIDTH = CELLS_HEIGHT; 
-	this->setPosition(visibleSize.height*0.05,visibleSize.height*0.05);
+	this->setPosition(origin.x+visibleSize.height*0.05,origin.y+visibleSize.height*0.05);
 	 }
 	 
 	  seedAllCells();
@@ -113,9 +103,15 @@ cocos2d::Vector<SingleCell*> LifeGameGod::getCellList()
 bool LifeGameGod::onTouchBegan(Touch *touch, Event *unused_event)
 {
 	Vec2 pos = touch->getLocation();
-	
+	CCLOG("isRunningLife  %d",isRunningLife);
+	if(isRunningLife)
+	{
+		return false;
+	}
+    CCLOG("pos  xy [%f  %f]  visibleSize.height *0.95  %f  this->getPosition().x%f ",pos.x ,pos.y,visibleSize.height *0.95  ,this->getPosition().x );
 	if(pos.x < this->getPosition().x || pos.x>visibleSize.height *0.95 || pos.y < this->getPosition().y || pos.y>visibleSize.height *0.95)
 	{
+        CCLOG("out of bounds  %f  %f",pos.x ,pos.y);
 		return false;
 	}
 
@@ -123,6 +119,7 @@ bool LifeGameGod::onTouchBegan(Touch *touch, Event *unused_event)
 	int row = (pos.y-this->getPosition().y)/( CELLS_HEIGHT+CELLS_HEIGHT_SPEACING);
 	if((row + line * CELLS_HORIZEN_COUNT) < cellList.size() && (row + line * CELLS_HORIZEN_COUNT) >=0 )
 	{
+        CCLOG("state change  %d  %d",line ,row);
 		SingleCell* mcell  =  cellList.at(row + line * CELLS_HORIZEN_COUNT);
 		mcell->changeState();
 		mcell->updateCellColor();
@@ -134,6 +131,10 @@ int currentRow= -1;
 void LifeGameGod::onTouchMoved(Touch *touch, Event *unused_event)
 {
 	Vec2 pos = touch->getLocation();
+	if(isRunningLife)
+	{
+		return;
+	}
 	if(pos.x < this->getPosition().x || pos.x>visibleSize.height *0.95 || pos.y < this->getPosition().y || pos.y>visibleSize.height *0.95)
 	{
 		return;
@@ -182,3 +183,44 @@ void LifeGameGod::updateCells( float delta )
 	} 
 
 }
+
+
+void LifeGameGod::gameStart()
+{
+	isRunningLife = true;
+	schedule(schedule_selector( LifeGameGod::updateCells), CELLS_UPDATE_BREAK_TIME,kRepeatForever, 0.0f);
+}
+
+
+void LifeGameGod::gamePause()
+{
+	isRunningLife = false;
+	unschedule(schedule_selector( LifeGameGod::updateCells));
+}
+void LifeGameGod::gameResume()
+{
+	isRunningLife = true;
+	schedule(schedule_selector( LifeGameGod::updateCells), CELLS_UPDATE_BREAK_TIME,kRepeatForever, 0.0f);
+}
+
+
+void LifeGameGod::gameReset()
+{
+	isRunningLife = false;
+	gamePause();
+	for(int i = 0;i<getCellCount();i++)
+	{ 
+		SingleCell* mcell = cellList.at(i);
+		 if(mcell->getCurrentLivingState() == LIVING_STATE)
+		 {
+			 mcell->changeState();
+		 }
+	}
+
+	for(int i = 0;i<getCellCount();i++)
+	{ 
+		SingleCell* mcell = cellList.at(i);
+		mcell->updateCellColor();
+	}
+}
+

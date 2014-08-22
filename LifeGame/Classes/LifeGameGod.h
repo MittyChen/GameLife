@@ -2,7 +2,7 @@
 
 #include "cocos2d.h"
 #include "SingleCell.h"
-
+using namespace cocos2d;
 class LifeGameGod :
 	public cocos2d::Layer
 {
@@ -32,5 +32,7 @@ private:
 	int verticalCount;//竖向方格数
 	float CELLS_WIDTH;
 	float CELLS_HEIGHT;
+	 Size visibleSize ;
+	  Vec2 origin ;
 };
 

@@ -156,8 +156,7 @@ void MainMenuScene::menuCloseCallback(Ref* pSender)
 bool MainMenuScene::onTouchBegan(Touch *touch, Event *unused_event)
 {
 	CCLOG("HelloWorld::onTouchBegan");
-	Scene* gamesc =  GameScene::createScene();
-	Director::getInstance()->replaceScene(gamesc);
+    goScene(BASE_SCENE_ID::GAME_SCENE);
 	return true;
 }
 

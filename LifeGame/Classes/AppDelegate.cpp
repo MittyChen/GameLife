@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "SplashScene.h"
 #include "GameScene.h"
+#include "LoadingScene.h"
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {

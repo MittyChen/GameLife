@@ -149,6 +149,7 @@ void SingleCell::updateCellColor()
 			this->setColor(DEAD_COLOR); 
 		}else{
 			this->setColor(LIVING_COLOR);
+            this->updateCascadeColor();
 		}
 	}
 }

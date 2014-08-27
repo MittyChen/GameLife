@@ -56,6 +56,18 @@ void CommonUtils::setEffectMusicShouldPlay(bool val)
 	effectMusicShouldPlay = val;
 }
 
+void CommonUtils::changeScene(Scene * sceneOrigin,Scene * sceneTarget)
+{
+    
+    
+}
+void CommonUtils::changeScene(Layer * sceneOrigin,Layer * sceneTarget)
+{
+    sceneOrigin->runAction(FadeOut::create(2));
+ 
+    sceneTarget->runAction(FadeIn::create(2));
+}
+
 
 void CommonUtils::initNightShaders()
 {

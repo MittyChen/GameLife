@@ -2,7 +2,7 @@
 #define __COMMON_UTILS_H__
 
 #include "cocos2d.h"
-
+using namespace cocos2d;
 class CommonUtils
 {
 public:
@@ -12,6 +12,9 @@ public:
 	static void playBackgrondMusic();
 	static void playButtonTouchMusic();
 	static void setEffectMusicShouldPlay(bool val);
+    static void changeScene(Scene * sceneOrigin,Scene * sceneTarget);
+    static void changeScene(Layer * sceneOrigin,Layer * sceneTarget);
+    
 	static void initNightShaders();
 	static void dispatchNightShaders();
 	static void setNightGLprogram(cocos2d::Node* val);

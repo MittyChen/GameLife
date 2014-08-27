@@ -4,7 +4,7 @@
 #include "MainMenuScene.h"
 USING_NS_CC;
 using namespace  ui;
-
+//LifeGameGod* GameScene::god = NULL;
 Scene* GameScene::createScene()
 {
     // 'scene' is an autorelease object
@@ -28,13 +28,13 @@ bool GameScene::init()
         return false;
     }
     
+
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	 
-
-
-	god =LifeGameGod::create();
-	this->addChild(god);
+//    god = NULL;
+//    if(!god)
+    
 
 
 	auto startButon = LabelTTF::create("START", "epson1", 50 * visibleSize.height/480);
@@ -45,7 +45,7 @@ bool GameScene::init()
 	startButonLabel->setAnchorPoint(Vec2(0,0));
 	startButonLabel->setTag(UI_WIDGET_TAG::GAME_SCENE_START);
 	startButonLabel->setColor(Color3B(0.0f,128.0f,255.0f));
-	startButonLabel->setPosition(Vec2(origin.x + visibleSize.height + 2 * god->getPosition().x ,   origin.y +visibleSize.height*4/5 ));
+	startButonLabel->setPosition(Vec2(origin.x + visibleSize.height * 1.1 ,origin.y +visibleSize.height*4/5 ));
 	
 	auto pauseButton = LabelTTF::create("PAUSE", "epson1",50* visibleSize.height/480);
 	auto pauseButtonLabel = MenuItemLabel::create(
@@ -86,7 +86,7 @@ bool GameScene::init()
 		backButtonLabel->setTag(UI_WIDGET_TAG::GAME_SCENE_GO_BACK);
 
 
-		auto menu = Menu::create(startButonLabel, pauseButtonLabel,resumeButtonLabel,resetButtonLabel,backButtonLabel,NULL);
+        menu = Menu::create(startButonLabel, pauseButtonLabel,resumeButtonLabel,resetButtonLabel,backButtonLabel,NULL);
 		menu->setPosition(Vec2(0,0));
 		menu->setTag(UI_WIDGET_TAG::GAME_MENU);
 		this->addChild(menu, 1);
@@ -99,7 +99,14 @@ bool GameScene::init()
 		event->onTouchEnded = CC_CALLBACK_2(GameScene::onTouchEnded,this);
 		event->onTouchMoved = CC_CALLBACK_2(GameScene::onTouchMoved,this);
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(event,this);
-	} 
+	}
+    
+    {
+        god =LifeGameGod::create();
+        this->addChild(god);
+    }
+    
+    scheduleUpdate();
     return true;
 }
 
@@ -107,7 +114,7 @@ bool GameScene::init()
 
 bool GameScene::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	CCLOG("HelloWorld::onTouchBegan");
+	CCLOG("GameScene::onTouchBegan");
 	return true;
 }
 
@@ -156,4 +163,13 @@ void GameScene::menuTouchCallback( cocos2d::Ref* pSender )
 		break;
 	}
 
+}
+
+LifeGameGod * GameScene::getGodHandler()
+{
+    return god;
+}
+
+void GameScene::update(float delta)
+{
 }

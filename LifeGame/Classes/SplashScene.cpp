@@ -71,8 +71,10 @@ bool SplashScene::init()
 
  void SplashScene::goGameScene(float t)
  {
-		auto scene = MainMenuScene::createScene();
-		 Director::getInstance()->replaceScene(scene);
+//		auto scene = MainMenuScene::createScene();
+//        Director::getInstance()->replaceScene(scene);
+     goScene(BASE_SCENE_ID::MAIN_MENU_SCREEN);
+      
  }
 
  void SplashScene::touchWelcomeButton( cocos2d::Ref *pSender )

@@ -3,9 +3,9 @@
 
 #include "cocos2d.h"
 
+#include "BaseScene.h"
 
-
-class SplashScene : public cocos2d::Layer
+class SplashScene : BaseScene
 {
 public:
 	static cocos2d::Scene* createScene();
